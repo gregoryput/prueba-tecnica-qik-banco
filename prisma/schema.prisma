@@ -1,0 +1,66 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Driver {
+  driver_id         Int      @id @default(autoincrement())
+  first_name        String
+  last_name         String
+  license_number    String   @unique
+  phone_number      String?  @unique
+  email_address     String?  @unique
+  registration_date DateTime @default(now())
+  location          Json     // Aquí se almacena la ubicación en formato JSON
+  isStatus        Boolean  @default(false) // Estado del conductor: false (disponible) o true (en viaje)
+
+  trips             Trip[]   // Relación con Trip
+}
+
+
+model Passenger {
+  passenger_id      Int      @id @default(autoincrement())
+  first_name        String
+  last_name         String
+  phone_number      String?  @unique
+  email_address     String?  @unique
+  registration_date DateTime @default(now())
+  location          Json     // Aquí se almacena la ubicación en formato JSON
+
+  trips             Trip[]   // Relación con Trip
+}
+
+model Trip {
+  trip_id           Int      @id @default(autoincrement())
+  passenger_id      Int
+  driver_id         Int
+  start_time        DateTime @default(now())
+  end_time          DateTime?
+  status            String   @db.VarChar(50)
+  start_location    Json?    // JSON para la ubicación de inicio (opcional)
+  end_location      Json?    // JSON para la ubicación de fin (opcional)
+  total_distance    Float?
+
+  passenger         Passenger @relation(fields: [passenger_id], references: [passenger_id])
+  driver            Driver    @relation(fields: [driver_id], references: [driver_id])
+}
+
+
+
+
+
+
+
+
+//command para inicializar la base datos 
+// yarn migrate & yarn seed esto sirver para ejecutar la db y inserta data de ejemplo 
