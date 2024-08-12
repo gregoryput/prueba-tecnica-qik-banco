@@ -114,6 +114,16 @@ export class TripService {
       data: { status },
     });
 
+     // aqui cambiamos el estado de driver que comenzo un viaje en "Complete" y tambien el conductor estado true de disponible para otro pasajero
+     await this.prisma.driver.update({
+      where:{
+        driver_id:existingTrip.driver_id
+      },
+      data:{
+        isStatus:true
+      }
+    })
+
     return updatedTrip;
   }
 
