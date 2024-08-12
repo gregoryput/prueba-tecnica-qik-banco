@@ -21,12 +21,11 @@ model Driver {
   phone_number      String?  @unique
   email_address     String?  @unique
   registration_date DateTime @default(now())
-  location          Json     // Aquí se almacena la ubicación en formato JSON
-  isStatus        Boolean  @default(true) // Estado del conductor: false (en viaje)  o true (disponible)
+  location          Json // Aquí se almacena la ubicación en formato JSON
+  isStatus          Boolean  @default(true) // Estado del conductor: false (en viaje)  o true (disponible)
 
-  trips             Trip[]   // Relación con Trip
+  trips Trip[] // Relación con Trip
 }
-
 
 model Passenger {
   passenger_id      Int      @id @default(autoincrement())
@@ -35,30 +34,35 @@ model Passenger {
   phone_number      String?  @unique
   email_address     String?  @unique
   registration_date DateTime @default(now())
-  location          Json     // Aquí se almacena la ubicación en formato JSON
-
-  trips             Trip[]   // Relación con Trip
+  location          Json // Aquí se almacena la ubicación en formato JSON
+  isStatus          Boolean  @default(true) // Estado del pasajero: false (en viaje)  o true (disponible)
+  trips             Trip[] // Relación con Trip
 }
 
 model Trip {
-  trip_id           Int      @id @default(autoincrement())
-  passenger_id      Int
-  driver_id         Int
-  start_time        DateTime @default(now())
-  end_time          DateTime?
-  status            String   @db.VarChar(50)
-  start_location    Json?    // JSON para la ubicación de inicio (opcional)
-  end_location      Json?    // JSON para la ubicación de fin (opcional)
-  total_distance    Float?
+  trip_id        Int       @id @default(autoincrement())
+  passenger_id   Int
+  driver_id      Int
+  start_time     DateTime  @default(now())
+  end_time       DateTime?
+  status         String    @db.VarChar(50)
+  start_location Json?
+  end_location   Json?
+  total_distance Float?
 
-  passenger         Passenger @relation(fields: [passenger_id], references: [passenger_id])
-  driver            Driver    @relation(fields: [driver_id], references: [driver_id])
+  passenger Passenger @relation(fields: [passenger_id], references: [passenger_id])
+  driver    Driver    @relation(fields: [driver_id], references: [driver_id])
+  invoice   Invoice?  // Relación con Invoice
 }
 
+model Invoice {
+  invoice_id Int      @id @default(autoincrement())
+  trip_id    Int      @unique
+  amount     Float // Monto de la factura
+  issue_date DateTime @default(now()) // Fecha de emisión de la factura
 
-
-
-
+  trip Trip @relation(fields: [trip_id], references: [trip_id])
+}
 
 
 

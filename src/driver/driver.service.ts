@@ -32,11 +32,11 @@ export class DriverService {
         driver_id:id
       }
     });
-    
-    if (!driver) {
+
+    if ((await driver)?.driver_id == undefined) {
       throw new NotFoundException(`Driver with ID ${id} not found`);
     }
-
+    
     return driver;
     
   }
@@ -59,7 +59,7 @@ export class DriverService {
             cos(radians((location->'coordinates'->>0)::float) - radians(${longitude})) + 
             sin(radians(${latitude})) * sin(radians((location->'coordinates'->>1)::float))
         )
-    ) <= ${3000} -- Distancia en kilómetros
+    ) <= ${3} -- Distancia en kilómetros
     ORDER BY distance;
 `;
 

@@ -24,7 +24,9 @@ export class PassengerService {
                 passenger_id: id
             }
         })
-        if (!passenger) {
+        
+        
+        if ((await passenger)?.passenger_id == undefined) {
             throw new NotFoundException(`Passenger with ID ${id} not found`);
           }
         
@@ -51,8 +53,8 @@ export class PassengerService {
                         cos(radians((location->'coordinates'->>0)::float) - radians(${longitude})) + 
                         sin(radians(${latitude})) * sin(radians((location->'coordinates'->>1)::float))
                     )
-                ) <= ${3000} -- Distancia en kilómetros 
-                AND  "isStatus" = false
+                ) <= ${3} -- Distancia en kilómetros 
+                AND  "isStatus" = true
             ORDER BY distance
             LIMIT 3;
             `;

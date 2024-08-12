@@ -3,7 +3,7 @@ import { TripService } from './trip.service';
 import { TripDto } from './dto/createTrip.dto';
 import { changerTripStatusDto } from './dto/changeTrip.dto';
 
-@Controller('trip')
+@Controller("trip")
 export class TripController {
   constructor(private readonly tripService: TripService) { }
 
@@ -11,8 +11,6 @@ export class TripController {
   @Get()
   async getTripInProgress() {
     const trips = await this.tripService.getTripProgress();
-
-
     return trips;
   }
 

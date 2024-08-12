@@ -9,3 +9,12 @@ export class changerTripStatusDto {
   @IsString()
   status: string;
 }
+
+
+
+export class InvoiceDto {
+  
+}
+
+
+

@@ -46,7 +46,6 @@ export class DriverController {
   async getDriverByID(@Param('id') id: string) {
 
     const driver = await this.driverService.getDriverbyID(Number(id));
-
     return driver;
 
   }

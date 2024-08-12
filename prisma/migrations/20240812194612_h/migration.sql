@@ -8,7 +8,7 @@ CREATE TABLE "Driver" (
     "email_address" TEXT,
     "registration_date" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "location" JSONB NOT NULL,
-    "isStatus" BOOLEAN NOT NULL DEFAULT false,
+    "isStatus" BOOLEAN NOT NULL DEFAULT true,
 
     CONSTRAINT "Driver_pkey" PRIMARY KEY ("driver_id")
 );
@@ -22,6 +22,7 @@ CREATE TABLE "Passenger" (
     "email_address" TEXT,
     "registration_date" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "location" JSONB NOT NULL,
+    "isStatus" BOOLEAN NOT NULL DEFAULT true,
 
     CONSTRAINT "Passenger_pkey" PRIMARY KEY ("passenger_id")
 );
@@ -41,6 +42,16 @@ CREATE TABLE "Trip" (
     CONSTRAINT "Trip_pkey" PRIMARY KEY ("trip_id")
 );
 
+-- CreateTable
+CREATE TABLE "Invoice" (
+    "invoice_id" SERIAL NOT NULL,
+    "trip_id" INTEGER NOT NULL,
+    "amount" DOUBLE PRECISION NOT NULL,
+    "issue_date" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "Invoice_pkey" PRIMARY KEY ("invoice_id")
+);
+
 -- CreateIndex
 CREATE UNIQUE INDEX "Driver_license_number_key" ON "Driver"("license_number");
 
@@ -56,8 +67,14 @@ CREATE UNIQUE INDEX "Passenger_phone_number_key" ON "Passenger"("phone_number");
 -- CreateIndex
 CREATE UNIQUE INDEX "Passenger_email_address_key" ON "Passenger"("email_address");
 
+-- CreateIndex
+CREATE UNIQUE INDEX "Invoice_trip_id_key" ON "Invoice"("trip_id");
+
 -- AddForeignKey
 ALTER TABLE "Trip" ADD CONSTRAINT "Trip_passenger_id_fkey" FOREIGN KEY ("passenger_id") REFERENCES "Passenger"("passenger_id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Trip" ADD CONSTRAINT "Trip_driver_id_fkey" FOREIGN KEY ("driver_id") REFERENCES "Driver"("driver_id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Invoice" ADD CONSTRAINT "Invoice_trip_id_fkey" FOREIGN KEY ("trip_id") REFERENCES "Trip"("trip_id") ON DELETE RESTRICT ON UPDATE CASCADE;
