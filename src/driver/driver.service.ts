@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, NotFoundException, ParseFloatPipe } from "@nestjs/common";
 import { Driver } from "@prisma/client";
 import { PrismaService } from "src/prisma/prisma.service";
 
@@ -18,7 +18,7 @@ export class DriverService {
   async getDriverActives(): Promise<Driver[]>{
     return this.prisma.driver.findMany({
       where: {
-        isStatus: false // esto solo traera los que no estan en un viaje 
+        isStatus: true // esto solo traera los que no estan en un viaje 
       }
     });
 
@@ -26,17 +26,24 @@ export class DriverService {
   
   /// obtener un conductor por ID 
   async getDriverbyID(id: number): Promise<Driver>{
-    return this.prisma.driver.findUnique({
+    
+    const driver = this.prisma.driver.findUnique({
       where: {
         driver_id:id
       }
     });
     
+    if (!driver) {
+      throw new NotFoundException(`Driver with ID ${id} not found`);
+    }
+
+    return driver;
+    
   }
   // obtenga una lista de todos los conductores disponibles en un radio de 3km para una ubicacion especifica 
   
-  async getDriversInRadius(latitude: number, longitude: number): Promise<any> {
-    const drivers = await this.prisma.$queryRaw`
+  async getDriversInRadius(latitude: ParseFloatPipe, longitude: ParseFloatPipe): Promise<Driver[]> {
+    const drivers = await this.prisma.$queryRaw<Driver[]>`
     SELECT *,
         (
             6371 * acos(
@@ -55,6 +62,10 @@ export class DriverService {
     ) <= ${3000} -- Distancia en kilómetros
     ORDER BY distance;
 `;
+
+if (!drivers || drivers.length === 0) {
+  throw new NotFoundException('No drivers found  location');
+}
 
 return drivers;
 

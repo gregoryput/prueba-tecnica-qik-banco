@@ -1,52 +1,67 @@
-import { Injectable } from '@nestjs/common';
-import { Passenger } from '@prisma/client';
+import { Driver, Passenger } from '@prisma/client';
+import { Injectable, NotFoundException, ParseFloatPipe } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class PassengerService {
 
-    constructor(private prisma: PrismaService) {}
+    constructor(private prisma: PrismaService) { }
 
     //obtener una lista de todos los pasajeros
-    async getPassengers(): Promise<Passenger[]>{
-        return this.prisma.passenger.findMany();
+    async getPassengers(): Promise<Passenger[]> {
+
+        const passengers = this.prisma.passenger.findMany();
+        if (!passengers) {
+            throw new NotFoundException('No passengers found');
+          }
+        return passengers;
     }
 
     //obtener un pasajero por ID 
-    async getPassengerbyID(id:number): Promise<Passenger> {
-        return this.prisma.passenger.findFirst({
-            where:{
+    async getPassengerbyID(id: number): Promise<Passenger> {
+        const passenger = this.prisma.passenger.findFirst({
+            where: {
                 passenger_id: id
             }
         })
+        if (!passenger) {
+            throw new NotFoundException(`Passenger with ID ${id} not found`);
+          }
+        
+        return passenger
     }
 
-      // obtenga una lista de todos los conductores disponibles en un radio de 3km para una ubicacion especifica 
-  
-  async getDriversInRadiusForPassenger(latitude: number, longitude: number): Promise<any> {
-    const drivers = await this.prisma.$queryRaw`
-    SELECT *,
-       (
-           6371 * acos(
-               cos(radians(${latitude})) * cos(radians((location->'coordinates'->>1)::float)) * 
-               cos(radians((location->'coordinates'->>0)::float) - radians(${longitude})) + 
-               sin(radians(${latitude})) * sin(radians((location->'coordinates'->>1)::float))
-           )
-       ) AS distance
-FROM "Driver"
-WHERE (
-           6371 * acos(
-               cos(radians(${latitude})) * cos(radians((location->'coordinates'->>1)::float)) * 
-               cos(radians((location->'coordinates'->>0)::float) - radians(${longitude})) + 
-               sin(radians(${latitude})) * sin(radians((location->'coordinates'->>1)::float))
-           )
-       ) <= ${3000} -- Distancia en kilómetros 
-      and  isStatus = 1
-ORDER BY distance
-LIMIT 3;
-`;
+    // obtenga una lista de  los 3  conductores disponibles en un radio de 3km  
+    async getDriversInRadiusForPassenger(latitude: ParseFloatPipe, longitude: ParseFloatPipe): Promise<Driver[]> {
 
-return drivers;
+        
+        const drivers = await this.prisma.$queryRaw<Driver[]>`
+            SELECT *,
+            (
+                6371 * acos(
+                    cos(radians(${latitude})) * cos(radians((location->'coordinates'->>1)::float)) * 
+                    cos(radians((location->'coordinates'->>0)::float) - radians(${longitude})) + 
+                    sin(radians(${latitude})) * sin(radians((location->'coordinates'->>1)::float))
+                )
+            ) AS distance
+            FROM "Driver"
+            WHERE (
+                    6371 * acos(
+                        cos(radians(${latitude})) * cos(radians((location->'coordinates'->>1)::float)) * 
+                        cos(radians((location->'coordinates'->>0)::float) - radians(${longitude})) + 
+                        sin(radians(${latitude})) * sin(radians((location->'coordinates'->>1)::float))
+                    )
+                ) <= ${3000} -- Distancia en kilómetros 
+                AND  "isStatus" = false
+            ORDER BY distance
+            LIMIT 3;
+            `;
 
-  }
+        if (!drivers || drivers.length === 0) {
+            throw new NotFoundException('No drivers found  location');
+        }
+
+        return drivers;
+
+    }
 }

@@ -22,7 +22,7 @@ model Driver {
   email_address     String?  @unique
   registration_date DateTime @default(now())
   location          Json     // Aquí se almacena la ubicación en formato JSON
-  isStatus        Boolean  @default(false) // Estado del conductor: false (disponible) o true (en viaje)
+  isStatus        Boolean  @default(true) // Estado del conductor: false (en viaje)  o true (disponible)
 
   trips             Trip[]   // Relación con Trip
 }

@@ -1,4 +1,4 @@
-import { Controller, Get, Param, ParseFloatPipe, Query } from '@nestjs/common';
+import { Controller, Get, Param, ParseFloatPipe, ParseIntPipe, Query } from '@nestjs/common';
 import { PassengerService } from './passenger.service';
 
 @Controller("passengers")
@@ -7,21 +7,29 @@ export class PassengerController {
 
 
   @Get()
-  async getPassenger(){
-    return this.passengerService.getPassengers();
-  }
+async getPassengers() {
+  const passengers = await this.passengerService.getPassengers();
+  
+  
 
-  @Get("passenger/:id")
-  async getPassengerbyID(@Param("id") id:string){
-    return this.passengerService.getPassengerbyID(Number(id));
-  }
+  return passengers;
+}
+
+@Get("/localization")
+async getDriversForPassenger(
+  @Query('latitude', ParseFloatPipe) latitude: ParseFloatPipe,
+  @Query('longitude', ParseFloatPipe) longitude: ParseFloatPipe,
+) {
+  const drivers = await this.passengerService.getDriversInRadiusForPassenger(latitude, longitude);
+  return drivers;
+}
+
+@Get("/:id")
+async getPassengerByID(@Param('id', ParseIntPipe) id: string) {
+  const passenger = await this.passengerService.getPassengerbyID(Number(id));
+
+  return passenger;
+}
 
 
-  @Get("localization")
-  async getDriversForPassenger( 
-    @Query('latitude', ParseFloatPipe) latitude: number,
-    @Query('longitude', ParseFloatPipe) longitude: number,)
-     {
-    return this.passengerService.getDriversInRadiusForPassenger(Number(latitude), Number(longitude));
-  }
 }

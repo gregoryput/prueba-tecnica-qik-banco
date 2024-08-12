@@ -70,7 +70,7 @@ async function main() {
         driver_id: 1,
         start_time: new Date("2024-08-10T10:00:00Z"),
         end_time: new Date("2024-08-10T10:30:00Z"),
-        status: "completed",
+        status: "Completed",
         start_location: {
           type: "Point",
           coordinates: [-73.98513, 40.758],
@@ -85,14 +85,14 @@ async function main() {
         passenger_id: 2,
         driver_id: 2,
         start_time: new Date("2024-08-10T11:00:00Z"),
-        status: "in_progress",
+        status: "In_progress",
         start_location: {
           type: "Point",
           coordinates: [-74.01, 40.73],
         },
         end_location: null,
         total_distance: null,
-      },
+      }
     ],
   });
 }
