@@ -1,27 +1,30 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# Proyecto NestJS
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+Este proyecto utiliza NestJS como framework de backend y PostgreSQL como base de datos. A continuación, se describen los pasos para configurar y ejecutar el proyecto.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Requisitos
 
+- [Docker](https://www.docker.com/get-started) instalado en tu sistema
+- [Node.js](https://nodejs.org/) y [Yarn](https://yarnpkg.com/) instalados
+
+## Configuración de la Base de Datos con Docker
+
+Sigue estos pasos para configurar la base de datos PostgreSQL usando Docker.
+
+### Descargar y ejecutar PostgreSQL
+
+Ejecuta el siguiente comando para descargar la imagen de PostgreSQL y ejecutar un contenedor:
+
+```bash
+
+docker pull postgres
+
+docker run --name docker-SqlPostgres 
+  -e POSTGRES_USER=localhost 
+  -e POSTGRES_PASSWORD=localhost123 
+  -e POSTGRES_DB=dbtaxi24 
+  -p 5432:5432 
+  -d postgres
 ## Description
 
 [Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
@@ -30,33 +33,23 @@
 
 ```bash
 $ yarn install
-```
 
-## Running the app
+## General la base de datos en el proyecto
 
-```bash
-# development
-$ yarn run start
+$ yarn migrate 
 
-# watch mode
+## Insertar datos de ejemplo que se encuentra en la carpeta prisma archivo seed.ts
+
+$ yarn seed 
+
+## luego ejecutar el proyecto 
+
 $ yarn run start:dev
-
-# production mode
-$ yarn run start:prod
 ```
 
-## Test
 
-```bash
-# unit tests
-$ yarn run test
 
-# e2e tests
-$ yarn run test:e2e
 
-# test coverage
-$ yarn run test:cov
-```
 
 ## Support
 
@@ -64,10 +57,114 @@ Nest is an MIT-licensed open source project. It can grow thanks to the sponsors 
 
 ## Stay in touch
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+- Linkedin - [Gregory Sanchez](https://www.linkedin.com/in/gregory-albert-s%C3%A1nchez-05820019b/)
+- GitHub - [gregoryput](https://github.com/gregoryput)
 
 ## License
 
 Nest is [MIT licensed](LICENSE).
+
+
+
+## Uso de los Endpoints Creados
+
+Para facilitar el análisis del proyecto y el uso de los diferentes endpoints creados, se han proporcionado ejemplos en formato JSON. Estos ejemplos ilustran cómo interactuar con la API y permiten una comprensión más clara de las funcionalidades disponibles. En este caso práctico, todos los conductores están ubicados en la provincia de La Romana, lo que permite centrarse en un escenario geográfico específico para evaluar la eficacia de los endpoints.
+
+#  Escenario de Ejemplo 
+
+IMAGEN para mayor compresion: 
+
+![alt text](map.png)
+
+**Nota:** eEn el archivo seed.ts están los modelos con la ubicación exacta y un comentario de dónde se encuentra cada uno. Este es solo una guía de ejemplo para tener mayor contexto del proyecto.
+
+**URL drivers** 
+
+Todos los conductores 
+```bash
+http://localhost:3000/drivers
+```
+Buscar  conductores por id
+```bash
+http://localhost:3000/drivers/id
+```
+
+Todos los conductores que estan disponible 
+```bash
+http://localhost:3000/drivers/status
+```
+Todos los conductores que estan cerca en un radio de 3km de distancia  para una ubiacion especifica 
+```bash
+http://localhost:3000/drivers/localization?longitude=18.431912088138972&latitude=-68.97259722473999
+```
+
+
+**URL passengers** 
+
+ Todos los pasajeros 
+```bash
+http://localhost:3000/passengers
+```
+
+Todos los conductores por id
+```bash
+http://localhost:3000/passengers/id
+```
+Los 3 conductores disponible mas cerca del pasajero que esta solicitando un viaje
+```bash
+http://localhost:3000/passengers/localization?longitude=18.431912088138972&latitude=-68.97259722473999
+```
+
+
+
+**URL trips** 
+
+ Todos los viajes que esta en progreso o activos 
+```bash
+http://localhost:3000/trip
+```
+
+Completar un viaje que esta en en progreso
+```bash
+## verbo PATCH // Nota: ya que solo cambia un estado y no es una actualizacion completa 
+http://localhost:3000/trip
+
+##JSON de prueba
+{
+  "trip_id":1,
+  "status":"completed"
+}
+
+
+```
+
+Crear un viaje 
+```bash
+## verbo POST  
+http://localhost:3000/trip
+
+## JSON de prueba
+
+{
+  "passenger_id": 3,
+  "driver_id": 3,
+  "start_time": "2024-08-10T10:00:00Z",
+  "end_time": "2024-08-10T10:30:00Z",
+  "status": "in_progress",
+  "start_location": {
+    "type": "Point",
+    "coordinates": [-73.98513, 40.758]
+  },
+  "end_location": {
+    "type": "Point",
+    "coordinates": [-73.935242, 40.73061]
+  },
+  "total_distance": 5.0
+}
+
+```
+
+
+
+
+

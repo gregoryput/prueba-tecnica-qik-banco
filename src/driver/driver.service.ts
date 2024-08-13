@@ -5,17 +5,17 @@ import { PrismaService } from "src/prisma/prisma.service";
 
 @Injectable()
 export class DriverService {
-  
-  constructor(private prisma: PrismaService) {}
+
+  constructor(private prisma: PrismaService) { }
 
   //obtener una lista de todos los conductores 
-  async getDriver(): Promise<Driver[]>{
+  async getDriver(): Promise<Driver[]> {
     return this.prisma.driver.findMany();
 
   }
 
   //obtener una lista de todos los controladores disponibles 
-  async getDriverActives(): Promise<Driver[]>{
+  async getDriverActives(): Promise<Driver[]> {
     return this.prisma.driver.findMany({
       where: {
         isStatus: true // esto solo traera los que no estan en un viaje 
@@ -23,25 +23,25 @@ export class DriverService {
     });
 
   }
-  
+
   /// obtener un conductor por ID 
-  async getDriverbyID(id: number): Promise<Driver>{
-    
+  async getDriverbyID(id: number): Promise<Driver> {
+
     const driver = this.prisma.driver.findUnique({
       where: {
-        driver_id:id
+        driver_id: id
       }
     });
 
     if ((await driver)?.driver_id == undefined) {
       throw new NotFoundException(`Driver with ID ${id} not found`);
     }
-    
+
     return driver;
-    
+
   }
   // obtenga una lista de todos los conductores disponibles en un radio de 3km para una ubicacion especifica 
-  
+
   async getDriversInRadius(latitude: ParseFloatPipe, longitude: ParseFloatPipe): Promise<Driver[]> {
     const drivers = await this.prisma.$queryRaw<Driver[]>`
     SELECT *,
@@ -63,11 +63,11 @@ export class DriverService {
     ORDER BY distance;
 `;
 
-if (!drivers || drivers.length === 0) {
-  throw new NotFoundException('No drivers found  location');
-}
+    if (!drivers || drivers.length === 0) {
+      throw new NotFoundException('No drivers found  location');
+    }
 
-return drivers;
+    return drivers;
 
   }
 }
