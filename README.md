@@ -106,7 +106,7 @@ http://localhost:3000/drivers/localization?longitude=18.431912088138972&latitude
 http://localhost:3000/passengers
 ```
 
-Todos los conductores por id
+Buscar los pasajeros por id
 ```bash
 http://localhost:3000/passengers/id
 ```
