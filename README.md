@@ -76,7 +76,7 @@ IMAGEN para mayor compresion:
 
 ![alt text](map.png)
 
-**Nota:** eEn el archivo seed.ts están los modelos con la ubicación exacta y un comentario de dónde se encuentra cada uno. Este es solo una guía de ejemplo para tener mayor contexto del proyecto.
+**Nota:** En el archivo seed.ts están los modelos con la ubicación exacta y un comentario de dónde se encuentra cada uno. Este es solo una guía de ejemplo para tener mayor contexto del proyecto.
 
 **URL drivers** 
 
