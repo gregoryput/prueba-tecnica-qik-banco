@@ -124,7 +124,7 @@ http://localhost:3000/passengers/localization?longitude=18.431912088138972&latit
 http://localhost:3000/trip
 ```
 
-Completar un viaje que esta en en progreso
+Completar un viaje que esta en progreso
 ```bash
 ## verbo PATCH // Nota: ya que solo cambia un estado y no es una actualizacion completa 
 http://localhost:3000/trip
