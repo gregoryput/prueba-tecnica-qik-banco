@@ -93,7 +93,7 @@ Todos los conductores que estan disponible
 ```bash
 http://localhost:3000/drivers/status
 ```
-Todos los conductores que estan cerca en un radio de 3km de distancia  para una ubiacion especifica 
+Todos los conductores que estan cerca en un radio de 3km de distancia  para una ubicacion especifica 
 ```bash
 http://localhost:3000/drivers/localization?longitude=18.431912088138972&latitude=-68.97259722473999
 ```
